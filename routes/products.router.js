@@ -35,10 +35,11 @@ router.put('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const product = req.body
+  console.log(product)
   res.json({
     product,
     message: 'Hello the API is working',
-    method: 'get'
+    method: 'post'
   })
 
 })
