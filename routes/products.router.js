@@ -5,60 +5,84 @@ const router = express.Router()
 const service = new ProductsService();
 
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res, next) => {
 
-  const products = service.search();
-
-  res.json({
-    products,
-    message: 'Hello the API is working',
-    method: 'get'
-  })
-
-})
-
-router.get('/:id', (req, res) => {
-  const { id } = req.params
-  res.json({
-    id,
-    message: 'Hello the API is working',
-    method: 'get'
-  })
+  try {
+    const products = await service.search();
+    res.json({
+      products,
+      message: 'Hello the API is working',
+      method: 'get'
+    })
+  }
+  catch (error) {
+    next(error)
+  }
 
 })
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const product = await service.searchOne(id);
+    res.json({
+      product,
+      message: 'Hello the API is working',
+      method: 'get'
+    })
+  } catch (error) {
+    next(error)
+  }
 
-router.delete('/:id', (req, res) => {
-  const { id } = req.params
-  res.json({
-    id,
-    message: 'Hello the API is working',
-    method: 'delete'
-  })
+})
+
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const productDelete = await service.delete(id);
+    res.json({
+      productDelete,
+      message: 'Hello the API is working',
+      method: 'delete'
+    })
+  } catch (error) {
+    next(error)
+  }
 
 })
 
 
-router.patch('/:id', (req, res) => {
-  const { id } = req.params
-  const body = req.body
-  res.json({
-    id,
-    body,
-    message: 'Hello the API is working',
-    method: 'patch'
-  })
+router.patch('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const body = req.body
+
+    const productUpdate = await service.update(id, body);
+    res.json({
+      productUpdate,
+      message: 'Hello the API is working',
+      method: 'patch'
+    })
+  } catch (error) {
+    next(error)
+
+  }
 
 })
 
-router.post('/', (req, res) => {
-  const product = req.body
-
-  res.json({
-    product,
-    message: 'Hello the API is working',
-    method: 'post'
-  })
+router.post('/', async (req, res) => {
+  try {
+    const body = req.body
+    const product = await service.create(body);
+    res.json({
+      product,
+      message: 'Hello the API is working',
+      method: 'post'
+    })
+  } catch (error) {
+    next(error)
+  }
 
 })
 

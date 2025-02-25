@@ -6,27 +6,28 @@ class ProductsService {
 
 
 
-  create(data) {
-    return 'create aproduct'
+  async create(data) {
+
+    return { "message": "Product created", "data": data }
   }
 
 
-  search() {
+  async search() {
     return 'search products'
   }
 
-  searchOne(id) {
-    return 'search a product'
+  async searchOne(id) {
+    return { "message": "Product found", "id": id }
 
   }
 
-  update(id, data) {
-    return 'update product'
+  async update(id, data) {
+    return { "message": "Product updated", "id": id, "data": data }
 
   }
 
-  delete() {
-    return 'delete product'
+  async delete(id) {
+    return { "message": "Product deleted", "id": id }
 
   }
 
