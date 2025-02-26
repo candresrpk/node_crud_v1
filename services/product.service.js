@@ -1,3 +1,6 @@
+const boom = require('@hapi/boom');
+
+
 class ProductsService {
 
   constructor() {
