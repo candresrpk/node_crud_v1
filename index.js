@@ -1,4 +1,5 @@
 const express = require('express');
+const corse = require('cors');
 const routerApi = require('./routes');
 const { errorHandler, logErrors, boomErrorHandler } = require('./Middlewares/error.handler');
 
@@ -8,6 +9,18 @@ const port = 3000;
 // Middleware for parsing JSON requests
 app.use(express.json());
 
+// const whitelist = ['http://localhost:8080'];
+// const options = {
+//   origin: (origin, callback) => {
+//     if (whitelist.includes(origin) || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   }
+// }
+
+app.use(corse());
 
 app.get('/', (req, res) => {
 
