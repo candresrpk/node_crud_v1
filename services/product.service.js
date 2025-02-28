@@ -1,10 +1,12 @@
 const boom = require('@hapi/boom');
-
+const pool = require('../libs/postgres');
 
 class ProductsService {
 
   constructor() {
     this.products = [];
+    this.dbpool = pool;
+    this.dbpool.on('error', (err) => console.error('Unexpected error on idle client', err))
   }
 
 
@@ -16,7 +18,11 @@ class ProductsService {
 
 
   async search() {
-    return 'search products'
+
+    const query = 'SELECT * FROM tasks';
+    const { rows } = await this.dbpool.query(query)
+
+    return { "message": "Products found", "data": rows }
   }
 
   async searchOne(id) {
