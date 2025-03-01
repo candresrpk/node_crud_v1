@@ -63,14 +63,14 @@ router.delete('/:id',
 router.patch('/:id',
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const { id } = req.params
       const body = req.body
 
-      const productUpdate = await service.update(id, body);
+      const product = await service.productUpdate(id, body);
       res.json({
-        productUpdate,
+        product,
         message: 'Hello the API is working',
         method: 'patch'
       })
@@ -83,7 +83,7 @@ router.patch('/:id',
 
 router.post('/',
   validatorHandler(createProductSchema, 'body'),
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const body = req.body
       const product = await service.create(body);

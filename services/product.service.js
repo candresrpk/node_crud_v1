@@ -1,41 +1,50 @@
 const boom = require('@hapi/boom');
-const pool = require('../libs/postgres');
+const { models } = require('../libs/sequelize');
 
 class ProductsService {
 
   constructor() {
     this.products = [];
-    this.dbpool = pool;
-    this.dbpool.on('error', (err) => console.error('Unexpected error on idle client', err))
   }
 
 
 
   async create(data) {
 
-    return { "message": "Product created", "data": data }
+    const newProduct = await models.Product.create(data)
+    return { "message": "Product created", "data": newProduct }
   }
 
 
   async search() {
 
-    const query = 'SELECT * FROM tasks';
-    const { rows } = await this.dbpool.query(query)
+    const products = await models.Product.findAll()
 
-    return { "message": "Products found", "data": rows }
+    return { "message": "Products found", "data": products }
   }
 
   async searchOne(id) {
-    return { "message": "Product found", "id": id }
+    const product = await models.Product.findByPk(id)
+
+    if (!product) {
+      throw boom.notFound('Product not found')
+    }
+
+    return { "message": "Product found", "product": product }
 
   }
 
-  async update(id, data) {
-    return { "message": "Product updated", "id": id, "data": data }
+  async productUpdate(id, data) {
+    const { product } = await this.searchOne(id)
+
+    const updateProduct = await product.update(data)
+    return { "message": "Product updated", "id": id, "data": updateProduct }
 
   }
 
   async delete(id) {
+    const { product } = await this.searchOne(id)
+    await product.destroy()
     return { "message": "Product deleted", "id": id }
 
   }
