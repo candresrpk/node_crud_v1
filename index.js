@@ -1,7 +1,7 @@
 const express = require('express');
 const corse = require('cors');
 const routerApi = require('./routes');
-const { errorHandler, logErrors, boomErrorHandler } = require('./Middlewares/error.handler');
+const { errorHandler, logErrors, boomErrorHandler, ormErrorHandler } = require('./Middlewares/error.handler');
 
 const app = express();
 const port = 3000;
@@ -30,8 +30,10 @@ app.get('/', (req, res) => {
 
 routerApi(app); // Importing the router API function and passing it the app instance
 app.use(logErrors);
-app.use(errorHandler);
+app.use(ormErrorHandler);
 app.use(boomErrorHandler);
+app.use(errorHandler);
+
 
 
 app.listen(port, () => {
